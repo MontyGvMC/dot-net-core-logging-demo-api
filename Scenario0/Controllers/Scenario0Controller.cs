@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,11 +52,32 @@ namespace DotNetCoreLoggingDemoAPI.Scenario0.Controllers
         public IActionResult GetModelList()
         {
 
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            try
+            {
 
-            var list = _data.Select(kvp => kvp.Value).ToList();
+                if (!ModelState.IsValid)
+                {
 
-            return Ok(list);
+                    Logger.LogWarning(nameof(GetModelList) + "() Bad Request"
+                        + Environment.NewLine
+                        + JsonConvert.SerializeObject(ModelState, Formatting.Indented));
+
+                    return BadRequest(ModelState);
+                }
+
+                var list = _data.Select(kvp => kvp.Value).ToList();
+
+                Logger.LogInformation(nameof(GetModelList) + "() success");
+
+                return Ok(list);
+
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(e, nameof(GetModelList) + "()");
+                return StatusCode(500);
+            }
+            
         }
 
         /// <summary>
@@ -73,11 +95,34 @@ namespace DotNetCoreLoggingDemoAPI.Scenario0.Controllers
         public IActionResult GetModel(int id)
         {
 
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            try
+            {
+                if (!ModelState.IsValid)
+                {
 
-            if (!_data.ContainsKey(id)) return NotFound();
+                    Logger.LogWarning(nameof(GetModel) + $"(id: {id}) Bad Request"
+                        + Environment.NewLine
+                        + JsonConvert.SerializeObject(ModelState, Formatting.Indented));
 
-            return Ok(_data[id]);
+                    return BadRequest(ModelState);
+                }
+
+                if (!_data.ContainsKey(id))
+                {
+                    Logger.LogWarning(nameof(GetModel) + $"(id: {id}) no model with id found");
+                    return NotFound();
+                }
+
+                Logger.LogInformation(nameof(GetModel) + $"(id: {id}) success");
+
+                return Ok(_data[id]);
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(e, nameof(GetModel) + $"(id: {id})");
+                return StatusCode(500);
+            }
+            
         }
 
         /// <summary>
@@ -95,22 +140,40 @@ namespace DotNetCoreLoggingDemoAPI.Scenario0.Controllers
         public IActionResult PostModel([FromBody] Scenario0RequestModel request)
         {
 
-            if (!ModelState.IsValid) return BadRequest(ModelState);
-
-            // for testing exceptions
-            if (request.Value < 0) throw new Exception("the test exception because item.Value < 0");
-
-            var item = new Scenario0Model
+            try
             {
-                Id = NextId,
-                Name = request.Name,
-                Date = request.Date,
-                Value = request.Value
-            };
+                if (!ModelState.IsValid)
+                {
 
-            _data.Add(item.Id, item);
+                    Logger.LogWarning(nameof(PostModel) + $"(request: {JsonConvert.SerializeObject(request)}) Bad Request"
+                        + Environment.NewLine
+                        + JsonConvert.SerializeObject(ModelState, Formatting.Indented));
 
-            return CreatedAtAction(nameof(GetModel), new { Id = item.Id }, item);
+                    return BadRequest(ModelState);
+                }
+
+                // for testing exceptions
+                if (request.Value < 0) throw new Exception("the test exception because item.Value < 0");
+
+                var item = new Scenario0Model
+                {
+                    Id = NextId,
+                    Name = request.Name,
+                    Date = request.Date,
+                    Value = request.Value
+                };
+
+                _data.Add(item.Id, item);
+
+                Logger.LogInformation(nameof(PostModel) + $"(request: {JsonConvert.SerializeObject(request)}) success");
+
+                return CreatedAtAction(nameof(GetModel), new { Id = item.Id }, item);
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(e, nameof(PostModel) + $"(request: {JsonConvert.SerializeObject(request)})");
+                return StatusCode(500);
+            }
 
         }
 
@@ -130,16 +193,40 @@ namespace DotNetCoreLoggingDemoAPI.Scenario0.Controllers
         public IActionResult PutModel(int id, [FromBody] Scenario0RequestModel request)
         {
 
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            try
+            {
+                if (!ModelState.IsValid)
+                {
 
-            if (!_data.ContainsKey(id)) return NotFound();
+                    Logger.LogWarning(nameof(PutModel) + $"(id: {id}, request: {JsonConvert.SerializeObject(request)}) Bad Request"
+                        + Environment.NewLine
+                        + JsonConvert.SerializeObject(ModelState, Formatting.Indented));
 
-            var item = _data[id];
-            item.Name = request.Name;
-            item.Date = request.Date;
-            item.Value = request.Value;
+                    return BadRequest(ModelState);
+                }
 
-            return Ok(item);
+                if (!_data.ContainsKey(id))
+                {
+                    Logger.LogWarning(nameof(PutModel) + $"(id: {id}, request: {JsonConvert.SerializeObject(request)}) no model with id found");
+
+                    return NotFound();
+                }
+
+                var item = _data[id];
+                item.Name = request.Name;
+                item.Date = request.Date;
+                item.Value = request.Value;
+
+                Logger.LogInformation(nameof(PutModel) + $"(id: {id}, request: {JsonConvert.SerializeObject(request)}) success");
+
+                return Ok(item);
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(e, nameof(PutModel) + $"(request: {JsonConvert.SerializeObject(request)})");
+                return StatusCode(500);
+            }
+           
         }
 
         /// <summary>
@@ -156,13 +243,37 @@ namespace DotNetCoreLoggingDemoAPI.Scenario0.Controllers
         public IActionResult DeleteModel(int id)
         {
 
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            try
+            {
+                if (!ModelState.IsValid)
+                {
 
-            if (!_data.ContainsKey(id)) return NotFound();
+                    Logger.LogWarning(nameof(DeleteModel) + $"(id: {id}) Bad Request" 
+                        + Environment.NewLine 
+                        + JsonConvert.SerializeObject(ModelState, Formatting.Indented));
 
-            _data.Remove(id);
+                    return BadRequest(ModelState);
+                }
 
-            return NoContent();
+                if (!_data.ContainsKey(id))
+                {
+
+                    Logger.LogWarning(nameof(DeleteModel) + $"(id: {id}) no model with id found");
+
+                    return NotFound();
+                }
+
+                _data.Remove(id);
+
+                Logger.LogInformation(nameof(DeleteModel) + $"(id: {id}) success");
+
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(e, nameof(GetModel) + $"(id: {id})");
+                return StatusCode(500);
+            }
 
         }
 
