@@ -61,8 +61,8 @@ namespace DotNetCoreLoggingDemoAPI.Scenario1.Filters
             //_loggerFactory.CreateLogger<GlobalLoggingFilter>().LogDebug(nameof(OnActionExecuting));
             //CreateDataLogger(context.ActionDescriptor).LogDebug(nameof(OnActionExecuting));
 
-            // here you have access to the action arguments
-            // but we do not know if we need them later so let's cache them (yep: evil)
+            // here is the only place where is access to the action arguments
+            // but we do not know if we need them later so let's cache them (yep: evil if large)
             _actionArguments = (context.ActionArguments.Count > 0) ? context.ActionArguments : null;
         }
 
@@ -72,11 +72,7 @@ namespace DotNetCoreLoggingDemoAPI.Scenario1.Filters
             //_loggerFactory.CreateLogger<GlobalLoggingFilter>().LogDebug(nameof(OnActionExecuted));
             //CreateDataLogger(context.ActionDescriptor).LogDebug(nameof(OnActionExecuted));
 
-            //if (!context.ModelState.IsValid)
-            //{
-            //    // no action arguments here
-            //}
-
+            // checking for bad requests only works with context.ModelState.IsValid but not status codes
         }
 
         ///<inheritdoc/>
@@ -87,12 +83,6 @@ namespace DotNetCoreLoggingDemoAPI.Scenario1.Filters
 
             // if bad requests should be handled check with the model state here
             // the response is not yet executed and may not yet hold the status code 400
-
-            //if (!context.ModelState.IsValid)
-            //{
-            //    // unfortunatly you do not have action arguments here
-            //    // so you can't log the model bound data in here
-            //}
         }
 
         ///<inheritdoc/>
@@ -106,8 +96,6 @@ namespace DotNetCoreLoggingDemoAPI.Scenario1.Filters
             ////if (!context.ModelState.IsValid)
             //if (context.HttpContext.Response.StatusCode == 400)
             //{
-            //    // unfortunatly you do not have action arguments here
-            //    // so you can't log the model bound data in here
             //}
 
             int statusCode = context.HttpContext.Response.StatusCode;
