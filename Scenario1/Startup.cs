@@ -30,7 +30,15 @@ namespace DotNetCoreLoggingDemoAPI.Scenario1
         /// <inheritdoc/>
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services
+                .AddMvc
+                (
+                    options => 
+                    {
+                        options.Filters.Add<Filters.GlobalLoggingFilter>();
+                    }
+                )
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddSwashbuckle();
 
