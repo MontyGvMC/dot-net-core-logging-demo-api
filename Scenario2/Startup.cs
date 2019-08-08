@@ -1,8 +1,12 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using System.Linq;
 
 namespace DotNetCoreLoggingDemoAPI.Scenario2
 {
@@ -30,10 +34,12 @@ namespace DotNetCoreLoggingDemoAPI.Scenario2
         /// <inheritdoc/>
         public void ConfigureServices(IServiceCollection services)
         {
+
+            //this is the service configuration for the solution with the two global filters in the correct order
             services
                 .AddMvc
                 (
-                    mvcOptions => 
+                    mvcOptions =>
                     {
                         mvcOptions.Filters.Add<Filters.GlobalLoggingFilter>(1);
                         mvcOptions.Filters.Add<Filters.BadRequestFilter>(2);
@@ -44,35 +50,64 @@ namespace DotNetCoreLoggingDemoAPI.Scenario2
                     apiBehaviorOptions =>
                     {
                         apiBehaviorOptions.SuppressModelStateInvalidFilter = true;
-
-                        //https://docs.microsoft.com/en-us/aspnet/core/web-api/index?view=aspnetcore-2.2#customize-badrequest-response
-                        //apiBehaviorOptions.InvalidModelStateResponseFactory = context =>
-                        //{
-
-                        //    // log bad requests in here???
-
-                        //    var problemDetails = new ValidationProblemDetails(context.ModelState)
-                        //    {
-                        //        Type = "https://contoso.com/probs/modelvalidation",
-                        //        Title = "One or more model validation errors occurred.",
-                        //        Status = Microsoft.AspNetCore.Http.StatusCodes.Status400BadRequest,
-                        //        Detail = "See the errors property for details.",
-                        //        Instance = context.HttpContext.Request.Path
-                        //    };
-
-                        //    return new BadRequestObjectResult(problemDetails)
-                        //    {
-                        //        ContentTypes = { "application/problem+json" }
-                        //    };
-                        //};
                     }
                 )
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
+            // this is the service configuration for the approach of logging within the InvalidModelStateResponseFactory
+            //services
+            //    .AddMvc
+            //    (
+            //        mvcOptions =>
+            //        {
+            //            mvcOptions.Filters.Add<Filters.GlobalLoggingFilter>();
+            //        }
+            //    )
+            //    .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            //services.PostConfigure<ApiBehaviorOptions>(options =>
+            //{
+            //    //TODO does this respect the settings regarding the configured response model?
+            //    //     seems to be different between the two approaches
+
+            //    var builtInFactory = options.InvalidModelStateResponseFactory;
+
+            //    options.InvalidModelStateResponseFactory = context =>
+            //    {
+
+            //        var logger = context.HttpContext.RequestServices
+            //            .GetRequiredService<ILoggerFactory>()
+            //            .CreateLogger(context.ActionDescriptor.DisplayName.Split(" ")[0]);
+
+            //        logger.LogWarning
+            //        (
+            //            StatusCodes.Status400BadRequest,
+            //            JsonConvert.SerializeObject
+            //            (
+            //                new
+            //                {
+            //                    Arguments = "null", //TODO still need to figure out how to get the model data causing the problems
+            //                    ModelStateErrors = context.ModelState
+            //                        .Where(kvp => kvp.Value.Errors.Count > 0)
+            //                        .ToDictionary
+            //                        (
+            //                            kvp => kvp.Key,
+            //                            kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+            //                        )
+            //                },
+            //                Formatting.Indented
+            //            )
+            //        );
+
+            //        return builtInFactory(context);
+            //    };
+            //});
+
             services.AddSwashbuckle();
 
         }
-        /// <inheritdoc/>        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+
+        /// <inheritdoc/>
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
 
