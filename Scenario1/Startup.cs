@@ -42,6 +42,9 @@ namespace DotNetCoreLoggingDemoAPI.Scenario1
             // otherwise Swagger UI will display the HTML code of developer page in error cases
             //if (env.IsDevelopment()) { app.UseDeveloperExceptionPage(); }
 
+            app.UseMiddleware<Middleware.ExceptionHandlerMiddleware>(!env.IsDevelopment());
+            app.UseMiddleware<Middleware.ExceptionLoggingMiddleware>();
+
             app.UseSwashbuckle();
 
             app.UseMvc();
