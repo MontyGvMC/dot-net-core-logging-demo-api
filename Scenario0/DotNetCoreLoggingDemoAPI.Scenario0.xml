@@ -1,0 +1,166 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DotNetCoreLoggingDemoAPI.Scenario0</name>
+    </assembly>
+    <members>
+        <member name="T:DotNetCoreLoggingDemoAPI.Scenario0.Controllers.Scenario0Controller">
+            <summary>
+            A controller demonstrating the way logging can be done but IT SHOULD NOT BE DONE.
+            </summary>
+        </member>
+        <member name="P:DotNetCoreLoggingDemoAPI.Scenario0.Controllers.Scenario0Controller.Logger">
+            <summary>
+            The logger to be used.
+            </summary>
+        </member>
+        <member name="F:DotNetCoreLoggingDemoAPI.Scenario0.Controllers.Scenario0Controller._data">
+            <summary>
+            Our in memory data collection (for the sake of simpleness).
+            </summary>
+        </member>
+        <member name="P:DotNetCoreLoggingDemoAPI.Scenario0.Controllers.Scenario0Controller.NextId">
+            <summary>
+            A helper giving us the next id to use.
+            </summary>
+        </member>
+        <member name="M:DotNetCoreLoggingDemoAPI.Scenario0.Controllers.Scenario0Controller.#ctor(Microsoft.Extensions.Logging.ILogger{DotNetCoreLoggingDemoAPI.Scenario0.Controllers.Scenario0Controller})">
+            <summary>
+            Constructs a new instance.
+            </summary>
+            <param name="logger">The logger to be used.</param>
+        </member>
+        <member name="M:DotNetCoreLoggingDemoAPI.Scenario0.Controllers.Scenario0Controller.GetModelList">
+            <summary>
+            Gets the list of all models.
+            </summary>
+            <response code="200">OK: returned when the operation was success and retuns the list of all models.</response>
+        </member>
+        <member name="M:DotNetCoreLoggingDemoAPI.Scenario0.Controllers.Scenario0Controller.GetModel(System.Int32)">
+            <summary>
+            Gets the model with the given id.
+            </summary>
+            <param name="id">The id of the model to be returned.</param>
+            <response code="200">OK: returned when the operation was success and returns the model with the given id.</response>
+            <response code="400">Bad Request: returned when the client sent invalid data.</response>
+            <response code="404">Not Found: returned when no model with the given id exists.</response>
+        </member>
+        <member name="M:DotNetCoreLoggingDemoAPI.Scenario0.Controllers.Scenario0Controller.PostModel(DotNetCoreLoggingDemoAPI.Scenario0.Models.Scenario0RequestModel)">
+            <summary>
+            Creates a new model.
+            </summary>
+            <param name="request">The request holding the values to be created.</param>
+            <response code="201">Created: returned when the operation was success and returns the created model.</response>
+            <response code="400">Bad Request: returned when the client sent invalid data.</response>
+            <response code="404">Not Found: returned when no model with the given id exists.</response>
+        </member>
+        <member name="M:DotNetCoreLoggingDemoAPI.Scenario0.Controllers.Scenario0Controller.PutModel(System.Int32,DotNetCoreLoggingDemoAPI.Scenario0.Models.Scenario0RequestModel)">
+            <summary>
+            Updates the model with the given id setting it to the values from the request.
+            </summary>
+            <param name="id">The id of the model to be updated.</param>
+            <param name="request">The request holding the new values.</param>
+            <response code="200">OK: returned when the operation was success and returns the model with the updated values.</response>
+            <response code="400">Bad Request: returned when the client sent invalid data.</response>
+            <response code="404">Not Found: returned when no model with the given id exists.</response>
+        </member>
+        <member name="M:DotNetCoreLoggingDemoAPI.Scenario0.Controllers.Scenario0Controller.DeleteModel(System.Int32)">
+            <summary>
+            Deletes the model with the given id.
+            </summary>
+            <param name="id">The id of the model to be deleted.</param>
+            <response code="204">No Content: returned when the operation was success.</response>
+            <response code="400">Bad Request: returned when the client sent invalid data.</response>
+            <response code="404">Not Found: returned when no model with the given id exists.</response>
+        </member>
+        <member name="T:DotNetCoreLoggingDemoAPI.Scenario0.Models.Scenario0Model">
+            <summary>
+            The model used in the responses of scenario 0.
+            </summary>
+        </member>
+        <member name="P:DotNetCoreLoggingDemoAPI.Scenario0.Models.Scenario0Model.Id">
+            <summary>
+            Identifies the model for the CRUD actions.
+            </summary>
+        </member>
+        <member name="T:DotNetCoreLoggingDemoAPI.Scenario0.Models.Scenario0RequestModel">
+            <summary>
+            The model used in requests of our scenario 0.
+            </summary>
+        </member>
+        <member name="P:DotNetCoreLoggingDemoAPI.Scenario0.Models.Scenario0RequestModel.Name">
+            <summary>
+            A string field with some validation to cause bad requests.
+            </summary>
+        </member>
+        <member name="P:DotNetCoreLoggingDemoAPI.Scenario0.Models.Scenario0RequestModel.Date">
+            <summary>
+            A DateTime field.
+            </summary>
+        </member>
+        <member name="P:DotNetCoreLoggingDemoAPI.Scenario0.Models.Scenario0RequestModel.Value">
+            <summary>
+            Some integer value.
+            </summary>
+        </member>
+        <member name="T:DotNetCoreLoggingDemoAPI.Scenario0.Program">
+            <summary>
+            Our programm.
+            </summary>
+        </member>
+        <member name="M:DotNetCoreLoggingDemoAPI.Scenario0.Program.Main(System.String[])">
+            <summary>
+            The main method.
+            </summary>
+            <param name="args">The command line arguments to be used.</param>
+        </member>
+        <member name="M:DotNetCoreLoggingDemoAPI.Scenario0.Program.CreateWebHostBuilder(System.String[])">
+            <summary>
+            Creates the web host builder.
+            </summary>
+            <param name="args">The command line arguments to be used.</param>
+            <returns>Returns the IWebHostBuilder.</returns>
+        </member>
+        <member name="T:DotNetCoreLoggingDemoAPI.Scenario0.Startup">
+            <summary>
+            Our startup class.
+            </summary>
+        </member>
+        <member name="P:DotNetCoreLoggingDemoAPI.Scenario0.Startup.Configuration">
+            <summary>
+            The configuration to be used.
+            </summary>
+        </member>
+        <member name="M:DotNetCoreLoggingDemoAPI.Scenario0.Startup.#ctor(Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Constructs a new instance.
+            </summary>
+            <param name="configuration">The configuration to be used.</param>
+        </member>
+        <member name="M:DotNetCoreLoggingDemoAPI.Scenario0.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <inheritdoc/>
+        </member>
+        <member name="M:DotNetCoreLoggingDemoAPI.Scenario0.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IHostingEnvironment)">
+            <inheritdoc/>        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        </member>
+        <member name="T:Microsoft.Extensions.DependencyInjection.SwashbuckleIntegration">
+            <summary>
+            Extension methods for integrating Swashbuckle.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.SwashbuckleIntegration.AddSwashbuckle(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Adds the Swashbuckle related services (add Swashbuckle after MVC).
+            </summary>
+            <param name="services">The service collection to be extended.</param>
+            <returns>Returns the extended service collection.</returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.SwashbuckleIntegration.UseSwashbuckle(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            Adds the Swashbuckle related services to the pipeline (use Swashbuckle before MVC).
+            </summary>
+            <param name="app">The application builder to be extended.</param>
+            <returns>Returns the extended application builder.</returns>
+        </member>
+    </members>
+</doc>
