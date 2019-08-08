@@ -80,10 +80,6 @@ namespace DotNetCoreLoggingDemoAPI.Scenario2.Controllers
         public IActionResult PostModel([FromBody] Scenario2RequestModel request)
         {
 
-            // now handled by the [ApiController]
-            // but if we use apiBehaviorOptions.SuppressModelStateInvalidFilter = true in the Startup we still need it
-            //if (!ModelState.IsValid) return BadRequest(ModelState);
-
             // for testing exceptions
             if (request.Value < 0) throw new Exception("the test exception because item.Value < 0");
 
@@ -117,10 +113,6 @@ namespace DotNetCoreLoggingDemoAPI.Scenario2.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult PutModel(int id, [FromBody] Scenario2RequestModel request)
         {
-
-            // now handled by the [ApiController]
-            // but if we use apiBehaviorOptions.SuppressModelStateInvalidFilter = true in the Startup we still need it
-            //if (!ModelState.IsValid) return BadRequest(ModelState);
 
             if (!_data.ContainsKey(id)) return NotFound();
 

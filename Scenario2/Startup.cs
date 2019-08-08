@@ -33,18 +33,40 @@ namespace DotNetCoreLoggingDemoAPI.Scenario2
             services
                 .AddMvc
                 (
-                    options => 
+                    mvcOptions => 
                     {
-                        options.Filters.Add<Filters.GlobalLoggingFilter>();
+                        mvcOptions.Filters.Add<Filters.GlobalLoggingFilter>(1);
+                        mvcOptions.Filters.Add<Filters.BadRequestFilter>(2);
                     }
                 )
-                //.ConfigureApiBehaviorOptions
-                //(
-                //    apiBehaviorOptions => 
-                //    {
-                //        apiBehaviorOptions.SuppressModelStateInvalidFilter = true;
-                //    }
-                //)
+                .ConfigureApiBehaviorOptions
+                (
+                    apiBehaviorOptions =>
+                    {
+                        apiBehaviorOptions.SuppressModelStateInvalidFilter = true;
+
+                        //https://docs.microsoft.com/en-us/aspnet/core/web-api/index?view=aspnetcore-2.2#customize-badrequest-response
+                        //apiBehaviorOptions.InvalidModelStateResponseFactory = context =>
+                        //{
+
+                        //    // log bad requests in here???
+
+                        //    var problemDetails = new ValidationProblemDetails(context.ModelState)
+                        //    {
+                        //        Type = "https://contoso.com/probs/modelvalidation",
+                        //        Title = "One or more model validation errors occurred.",
+                        //        Status = Microsoft.AspNetCore.Http.StatusCodes.Status400BadRequest,
+                        //        Detail = "See the errors property for details.",
+                        //        Instance = context.HttpContext.Request.Path
+                        //    };
+
+                        //    return new BadRequestObjectResult(problemDetails)
+                        //    {
+                        //        ContentTypes = { "application/problem+json" }
+                        //    };
+                        //};
+                    }
+                )
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddSwashbuckle();
