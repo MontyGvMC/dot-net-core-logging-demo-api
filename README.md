@@ -1,5 +1,6 @@
 # .NET Core Logging Demo API
-A simple playground to figure out how collect the interesting data when writing logs in a .NET Core web API
+
+A simple playground to figure out how collect the interesting data when writing logs in a .NET Core (2.2) web API
 
 **One note right at the beginning!**
 
@@ -7,7 +8,7 @@ This logging demo is **NOT** about implementing custom logger, loggerfactories e
 
 ## What is it about?
 
-.NET Core provides us the Microsoft.Extensions.ILogger interface which we can use for writing our logs. And there are a bunch of logging frameworks which from which we can choose in order to decide where our logs are going to.
+.NET Core provides us the Microsoft.Extensions.ILogger interface which we can use for writing our logs. And there are a bunch of logging frameworks from which we can choose in order to decide where our logs are going to.
 
 Now it is up to us to take the ILogger, grab the data we want to log and write it.
 
@@ -36,3 +37,6 @@ A typical statement we stumble upon is "it depends on your requirements."
 
 So in this repo we will define some scenarios (mostly some error cases) and figure out how to produce the logs helping us to identify the problems.
 
+# Feel free...
+
+... to join. If you have a question how to get data in a specific scenario feel free to open an issue describing which logs you want and from where you want to write it (if you know). Maybe somebody else knows it and can provide matching code (snippets).
