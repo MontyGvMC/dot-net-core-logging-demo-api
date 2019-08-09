@@ -40,3 +40,12 @@ So in this repo we will define some scenarios (mostly some error cases) and figu
 # Feel free...
 
 ... to join. If you have a question how to get data in a specific scenario feel free to open an issue describing which logs you want and from where you want to write it (if you know). Maybe somebody else knows it and can provide matching code (snippets).
+
+
+## An overview
+
+**Scenario0** provides a basic in-memory CRUD controller where all the logging is done in the controller itself. This clutters the application code and demonstrates a way how it can be but shouldn't be done.
+
+**Scenario1** moves the logging code out of the controller into a middleware (for the logs of exception stack traces) and a filter for the logs of action arguments.
+
+**Scenario2** utilizes the [ApiControllerAttribute](https://github.com/aspnet/Mvc/blob/master/src/Microsoft.AspNetCore.Mvc.Core/ApiControllerAttribute.cs) and looks into the problem that the logging filter is not called anymore due to the automatic Bad Request responses taking a short cut in the pipeline.
